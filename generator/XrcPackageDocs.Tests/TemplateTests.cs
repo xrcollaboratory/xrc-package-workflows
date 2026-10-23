@@ -55,7 +55,7 @@ public sealed class TemplateTests
     {
         var page = Template.Render("index.md", Values());
 
-        Assert.StartsWith("# XRC Example\n\nAn example.\n\n* Name: `edu.cornell.xrc.toolkit.example`\n* Display name: XRC Example\n* Version: 1.2.3 ([changelog](changelog/CHANGELOG.md))\n* [Git URL](https://example.invalid/example.git)\n* [License](license/LICENSE.md)\n\nThe package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.\n\n## Dependencies\n\nThis version of the package was developed and tested with Unity 6000.0, with the following package dependencies.\n\n### XRC Toolkit packages\n\n", page);
+        Assert.StartsWith("# XRC Example\n\nAn example.\n\n* Name: `edu.cornell.xrc.toolkit.example`\n* Display name: XRC Example\n* Version: 1.2.3\n* [Git URL](https://example.invalid/example.git)\n\nThe package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.\n\n## Dependencies\n\nThis version of the package was developed and tested with Unity 6000.0, with the following package dependencies.\n\n### XRC Toolkit packages\n\n", page);
         Assert.Contains("* [edu.cornell.xrc.toolkit.core](https://xrcollaboratory.github.io/edu.cornell.xrc.toolkit.core/) ([Git URL](https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.core.git))\n\n### Other packages\n\nThe Package Manager installs these automatically.\n\n* [com.unity.inputsystem@1.14.1](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/)\n* com.example.registry@2.0.0\n\n## Installation\n\nAdd the XRC Toolkit packages listed under [Dependencies](#dependencies) first. Then, in the Package Manager, choose **Add package from git URL** and enter the package's [Git URL](https://example.invalid/example.git).\n\nSee Unity's manual:", page);
         Assert.EndsWith("> [!NOTE]\n> This documentation is public, but the package is not. Its repository is private to XR Collaboratory. Installing the package requires a GitHub account that XR Collaboratory has given access to the repository; without it, the Package Manager cannot download the package.\n", page);
         Assert.DoesNotContain("{{", page);
@@ -89,7 +89,7 @@ public sealed class TemplateTests
         var page = Template.Render("index.md", values);
 
         Assert.StartsWith("# XRC Example\n\n* Name: `edu.cornell.xrc.toolkit.example`\n", page);
-        Assert.Contains("* [License](license/LICENSE.md)\n\nThe package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.\n\n## Dependencies\n\n## Installation\n\nIn the Package Manager, choose", page);
+        Assert.Contains("* [Git URL](https://example.invalid/example.git)\n\nThe package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.\n\n## Dependencies\n\n## Installation\n\nIn the Package Manager, choose", page);
         Assert.EndsWith("The samples are under the Samples tab of the package.\n\n", page);
         Assert.DoesNotContain("### ", page);
     }
