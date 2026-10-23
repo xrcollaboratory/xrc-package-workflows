@@ -50,10 +50,23 @@ jobs:
           curl -sSfL -o "$RUNNER_TEMP/generator.zip" "https://github.com/xrcollaboratory/xrc-package-workflows/releases/download/$GENERATOR_VERSION/xrc-package-docs-win-x64.zip"
           7z x "$RUNNER_TEMP/generator.zip" -o"$RUNNER_TEMP/generator" -y > /dev/null
 
+      # The page templates come from main of this repository, so a change to the text is a push and nothing else.
+      - name: Checkout templates
+        uses: actions/checkout@v7
+        with:
+          repository: xrcollaboratory/xrc-package-workflows
+          ref: main
+          path: .xrc-package-workflows
+          sparse-checkout: templates
+          sparse-checkout-cone-mode: false
+
       # Writes Documentation~/index.md, manual/samples.md and manual/components.md. A field or class without an XML
       # summary, and a sample without a description, become warnings on the source line.
       - name: Generate pages
-        run: '"$RUNNER_TEMP/generator/xrc-package-docs.exe" . --annotations'
+        run: '"$RUNNER_TEMP/generator/xrc-package-docs.exe" . --templates .xrc-package-workflows/templates --annotations'
+
+      - name: Remove the templates checkout
+        run: rm -rf .xrc-package-workflows
 
       - name: Copy changelog and licenses
         run: |

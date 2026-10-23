@@ -6,24 +6,20 @@ namespace XrcPackageDocs;
 /// </summary>
 internal static class Generator
 {
-    public const string Usage = "Usage: xrc-package-docs <package root> [--out <Documentation~ folder>] [--annotations]";
+    public const string Usage = "Usage: xrc-package-docs <package root> [--out <Documentation~ folder>] [--templates <folder>] [--annotations]";
 
     /// <summary>
     /// The command line: the package root, <c>--out</c> for a Documentation~ folder other than the package's own,
-    /// and <c>--annotations</c> for GitHub Actions warnings on the source line of each missing description.
+    /// <c>--templates</c> for a folder of page templates to use instead of the built-in ones, and
+    /// <c>--annotations</c> for GitHub Actions warnings on the source line of each missing description.
     /// </summary>
     /// <returns>0 when the pages were written (missing descriptions are warnings), 1 on an error, 2 on bad arguments.</returns>
     public static int Run(string[] args, TextWriter output, TextWriter error)
     {
         var arguments = args.ToList();
         var annotations = arguments.Remove("--annotations");
-        string? outFolder = null;
-        var outIndex = arguments.IndexOf("--out");
-        if (outIndex >= 0 && outIndex + 1 < arguments.Count)
-        {
-            outFolder = arguments[outIndex + 1];
-            arguments.RemoveRange(outIndex, 2);
-        }
+        var outFolder = Option(arguments, "--out");
+        Template.Folder = Option(arguments, "--templates") is { } templates ? Path.GetFullPath(templates) : null;
         if (arguments.Count != 1)
         {
             error.WriteLine(Usage);
@@ -42,6 +38,16 @@ internal static class Generator
             error.WriteLine("ERROR: " + e.Message);
             return 1;
         }
+    }
+
+    private static string? Option(List<string> arguments, string name)
+    {
+        var index = arguments.IndexOf(name);
+        if (index < 0 || index + 1 >= arguments.Count)
+            return null;
+        var value = arguments[index + 1];
+        arguments.RemoveRange(index, 2);
+        return value;
     }
 
     public static void Generate(string packageRoot, string docsFolder, Report report)

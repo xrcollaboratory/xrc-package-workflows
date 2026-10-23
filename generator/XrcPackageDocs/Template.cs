@@ -15,6 +15,9 @@ internal static class Template
 {
     private static readonly Regex k_StandaloneTag = new(@"^[ \t]*(\{\{[#/](?:if|each)\b[^}]*\}\})[ \t]*(?:\r?\n|$)", RegexOptions.Multiline);
 
+    /// <summary>A folder whose templates take precedence over the copies built into the generator.</summary>
+    public static string? Folder { get; set; }
+
     public static string Render(string templateName, IReadOnlyDictionary<string, object?> values)
     {
         var template = k_StandaloneTag.Replace(Load(templateName), "$1");
@@ -23,6 +26,14 @@ internal static class Template
 
     private static string Load(string name)
     {
+        if (Folder != null)
+        {
+            var path = Path.Combine(Folder, name);
+            if (!File.Exists(path))
+                throw new GeneratorException("template " + name + " is missing from " + Folder);
+            return File.ReadAllText(path, Encoding.UTF8).ReplaceLineEndings("\n");
+        }
+
         using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Templates/" + name)
                            ?? throw new GeneratorException("template " + name + " is missing from the generator");
         using var reader = new StreamReader(stream, Encoding.UTF8);

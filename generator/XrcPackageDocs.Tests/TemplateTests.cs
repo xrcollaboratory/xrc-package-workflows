@@ -52,4 +52,23 @@ public sealed class TemplateTests
     {
         Assert.Throws<GeneratorException>(() => Template.Render("missing.md", Values()));
     }
+
+    [Fact]
+    public void PrefersATemplateFolderOverTheBuiltInCopy()
+    {
+        var folder = Path.Combine(Path.GetTempPath(), "xrc-package-docs-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(folder);
+        File.WriteAllText(Path.Combine(folder, "index.md"), "# {{displayName}} from the folder\n");
+        try
+        {
+            Template.Folder = folder;
+            Assert.Equal("# XRC Example from the folder\n", Template.Render("index.md", Values()));
+            Assert.Throws<GeneratorException>(() => Template.Render("other.md", Values()));
+        }
+        finally
+        {
+            Template.Folder = null;
+            Directory.Delete(folder, true);
+        }
+    }
 }

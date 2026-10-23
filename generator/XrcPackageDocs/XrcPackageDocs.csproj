@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Templates/index.md" LogicalName="Templates/index.md" />
+    <EmbeddedResource Include="../../templates/index.md" LogicalName="Templates/index.md" />
   </ItemGroup>
 
 </Project>
