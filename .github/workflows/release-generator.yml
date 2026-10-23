@@ -1,0 +1,39 @@
+name: Release xrc-package-docs
+
+# Builds the page generator and attaches it to a GitHub release when a generator-v* tag is pushed. The package
+# documentation workflow downloads it by that tag.
+
+on:
+  push:
+    tags:
+      - "generator-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Test
+        run: dotnet test generator --nologo
+
+      # Framework-dependent for Windows, rolled forward to whatever .NET runtime the windows-latest runner has.
+      - name: Publish
+        run: |
+          dotnet publish generator/XrcPackageDocs -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o "$RUNNER_TEMP/publish" --nologo
+          cd "$RUNNER_TEMP/publish"
+          zip -r "$RUNNER_TEMP/xrc-package-docs-win-x64.zip" .
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" "$RUNNER_TEMP/xrc-package-docs-win-x64.zip" --title "$GITHUB_REF_NAME" --generate-notes

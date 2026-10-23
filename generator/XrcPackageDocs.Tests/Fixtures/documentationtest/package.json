@@ -1,0 +1,32 @@
+{
+	"name": "edu.cornell.xrc.toolkit.documentationtest",
+	"version": "0.1.0",
+	"displayName": "XRC Documentation Test",
+	"description": "",
+	"unity": "6000.0",
+	"documentationUrl": "https://xrcollaboratory.github.io/edu.cornell.xrc.toolkit.documentationtest/",
+	"changelogUrl": "https://xrcollaboratory.github.io/edu.cornell.xrc.toolkit.documentationtest/changelog/CHANGELOG.html",
+	"licensesUrl": "https://xrcollaboratory.github.io/edu.cornell.xrc.toolkit.documentationtest/license/LICENSE.html",
+	"dependencies": {},
+	"keywords": [
+		"XRC",
+		"XR Collaboratory"
+	],
+	"author": {
+		"name": "XR Collaboratory"
+	},
+	"repository": {
+		"url": "https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.documentationtest.git",
+		"type": "git"
+	},
+	"xrcToolkit": {
+		"includeInOverview": false
+	},
+	"samples": [
+		{
+			"displayName": "XRC Documentation Test",
+			"description": "Sample showcasing the XRC Documentation Test package.",
+			"path": "Samples~/XRC Documentation Test"
+		}
+	]
+}

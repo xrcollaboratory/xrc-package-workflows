@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="XrcPackageDocs.Tests/XrcPackageDocs.Tests.csproj" />
+  <Project Path="XrcPackageDocs/XrcPackageDocs.csproj" />
+</Solution>

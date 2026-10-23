@@ -1,0 +1,86 @@
+name: Package documentation
+
+# Reusable workflow: builds a Unity package's documentation site with DocFX and deploys it to GitHub Pages.
+# Each package repository calls it from a short workflow of its own (see README.md). The overview, the samples page
+# and the components page are generated here, by xrc-package-docs, from package.json and the C# sources, and are
+# never committed to the package. Only the Inspector images under Documentation~/images/components/ are committed.
+
+on:
+  workflow_call:
+    inputs:
+      docfx-version:
+        description: DocFX release to build with. 2.59.4 is the last one that builds the API reference without Unity's assemblies.
+        type: string
+        default: "2.59.4"
+      generator-version:
+        description: Release tag of xrc-package-docs in xrc-package-workflows.
+        type: string
+        default: "generator-v1.0.0"
+
+jobs:
+  build:
+    # DocFX 2.59.4 needs Windows. Newer DocFX runs on Linux but drops every class whose Unity base class it cannot
+    # resolve, since Unity's assemblies are not on the runner, and the API reference comes out empty.
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Check that no generated page is committed
+        run: |
+          committed=$(git ls-files "Documentation~/index.md" "Documentation~/manual/components.md" "Documentation~/manual/samples.md" ".github/scripts")
+          if [ -n "$committed" ]; then
+            echo "$committed" | while read -r file; do
+              echo "::error file=$file::Generated at build time; remove it from the repository."
+            done
+            exit 1
+          fi
+
+      # Both come from pinned GitHub releases, so a new release cannot change or break a site without a commit here.
+      - name: Download DocFX and xrc-package-docs
+        env:
+          DOCFX_VERSION: ${{ inputs.docfx-version }}
+          GENERATOR_VERSION: ${{ inputs.generator-version }}
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/docfx.zip" "https://github.com/dotnet/docfx/releases/download/v$DOCFX_VERSION/docfx.zip"
+          7z x "$RUNNER_TEMP/docfx.zip" -o"$RUNNER_TEMP/docfx" -y > /dev/null
+          curl -sSfL -o "$RUNNER_TEMP/generator.zip" "https://github.com/xrcollaboratory/xrc-package-workflows/releases/download/$GENERATOR_VERSION/xrc-package-docs-win-x64.zip"
+          7z x "$RUNNER_TEMP/generator.zip" -o"$RUNNER_TEMP/generator" -y > /dev/null
+
+      # Writes Documentation~/index.md, manual/samples.md and manual/components.md. A field or class without an XML
+      # summary, and a sample without a description, become warnings on the source line.
+      - name: Generate pages
+        run: '"$RUNNER_TEMP/generator/xrc-package-docs.exe" . --annotations'
+
+      - name: Copy changelog and licenses
+        run: |
+          cp CHANGELOG.md Documentation~/changelog/CHANGELOG.md
+          cp LICENSE.md Documentation~/license/LICENSE.md
+          if [ -f "Third Party Notices.md" ]; then
+            cp "Third Party Notices.md" "Documentation~/license/Third Party Notices.md"
+          fi
+
+      - name: Build
+        run: '"$RUNNER_TEMP/docfx/docfx.exe" Documentation~/docfx.json'
+
+      - name: Set up Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
