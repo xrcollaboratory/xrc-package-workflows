@@ -23,7 +23,7 @@ This version of the package was developed and tested with Unity {{unity}}.
 
 {{/if}}
 {{#if xrcDependencies}}
-Add these XRC Toolkit packages first. The Package Manager does not install them for you:
+The package depends on the following XRC Toolkit packages. The Package Manager does not install them automatically, and the package cannot be installed while they are missing from the project, so add each one from its Git URL first:
 
 {{#each xrcDependencies}}
 * [{{name}}]({{documentationUrl}}) {{version}} or later ([Git URL]({{gitUrl}}))
@@ -31,7 +31,7 @@ Add these XRC Toolkit packages first. The Package Manager does not install them 
 
 {{/if}}
 {{#if unityDependencies}}
-These Unity packages are installed automatically:
+The package also depends on the following Unity packages, which the Package Manager installs automatically:
 
 {{#each unityDependencies}}
 * {{#if documentationUrl}}[{{name}}]({{documentationUrl}}){{/if}}{{#unless documentationUrl}}{{name}}{{/unless}} {{version}}
