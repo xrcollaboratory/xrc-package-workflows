@@ -55,11 +55,9 @@ public sealed class TemplateTests
         var page = Template.Render("index.md", Values());
 
         Assert.StartsWith("# XRC Example\n\nAn example.\n\n* Name: `edu.cornell.xrc.toolkit.example`\n* Display name: XRC Example\n* Version: 1.2.3 ([changelog](changelog/CHANGELOG.md))\n* [Git URL](https://example.invalid/example.git)\n* [License](license/LICENSE.md)\n\nThe package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.\n\n## Installation\n\nThis version of the package was developed and tested with Unity 6000.0.\n\n", page);
-        Assert.Contains("* [edu.cornell.xrc.toolkit.core](https://xrcollaboratory.github.io/edu.cornell.xrc.toolkit.core/) 0.4.4 or later ([Git URL](https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.core.git))
-", page);
+        Assert.Contains("* [edu.cornell.xrc.toolkit.core](https://xrcollaboratory.github.io/edu.cornell.xrc.toolkit.core/) 0.4.4 or later ([Git URL](https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.core.git))\n", page);
         Assert.Contains("* [com.unity.inputsystem](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/) 1.14.1\n* com.example.registry 2.0.0\n", page);
-        Assert.Contains("and enter the package's [Git URL](https://example.invalid/example.git).
-", page);
+        Assert.Contains("and enter the package's [Git URL](https://example.invalid/example.git).\n", page);
         Assert.Contains("> [!NOTE]\n> This documentation is public, but the package is not.", page);
         Assert.EndsWith("the Package Manager cannot download the package.\n\n", page);
         Assert.DoesNotContain("{{", page);
