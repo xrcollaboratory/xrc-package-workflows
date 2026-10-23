@@ -5,15 +5,15 @@ using System.Text.RegularExpressions;
 namespace XrcPackageDocs;
 
 /// <summary>
-/// Renders the Markdown templates in <c>Templates/</c>: <c>{{name}}</c> inserts a value, the block between
-/// <c>{{#if name}}</c> and <c>{{/if}}</c> is kept only when the value is set, and the block between
-/// <c>{{#each name}}</c> and <c>{{/each}}</c> is repeated for each item, with the item's values in scope and the
-/// enclosing values behind them. A block tag alone on its line takes the whole line with it, so a skipped block
-/// leaves no blank line behind.
+/// Renders the Markdown templates: <c>{{name}}</c> inserts a value, the block between <c>{{#if name}}</c> and
+/// <c>{{/if}}</c> is kept only when the value is set, <c>{{#unless name}}</c> to <c>{{/unless}}</c> only when it is
+/// not, and the block between <c>{{#each name}}</c> and <c>{{/each}}</c> is repeated for each item, with the item's
+/// values in scope and the enclosing values behind them. A block tag alone on its line takes the whole line with it,
+/// so a skipped block leaves no blank line behind.
 /// </summary>
 internal static class Template
 {
-    private static readonly Regex k_StandaloneTag = new(@"^[ \t]*(\{\{[#/](?:if|each)\b[^}]*\}\})[ \t]*(?:\r?\n|$)", RegexOptions.Multiline);
+    private static readonly Regex k_StandaloneTag = new(@"^[ \t]*(\{\{[#/](?:if|unless|each)\b[^}]*\}\})[ \t]*(?:\r?\n|$)", RegexOptions.Multiline);
 
     /// <summary>A folder whose templates take precedence over the copies built into the generator.</summary>
     public static string? Folder { get; set; }
@@ -56,7 +56,7 @@ internal static class Template
 
             var tag = text[(start + 2)..end].Trim();
             var afterTag = end + 2;
-            if (tag.StartsWith("#if ", StringComparison.Ordinal) || tag.StartsWith("#each ", StringComparison.Ordinal))
+            if (tag.StartsWith("#if ", StringComparison.Ordinal) || tag.StartsWith("#unless ", StringComparison.Ordinal) || tag.StartsWith("#each ", StringComparison.Ordinal))
             {
                 var name = tag[(tag.IndexOf(' ') + 1)..].Trim();
                 var (closeStart, closeEnd) = FindClose(text, afterTag, tag);
@@ -65,6 +65,11 @@ internal static class Template
                 if (tag.StartsWith("#if", StringComparison.Ordinal))
                 {
                     if (IsSet(value))
+                        result.Append(Render(body, scope));
+                }
+                else if (tag.StartsWith("#unless", StringComparison.Ordinal))
+                {
+                    if (!IsSet(value))
                         result.Append(Render(body, scope));
                 }
                 else if (value is IEnumerable<IReadOnlyDictionary<string, object?>> items)

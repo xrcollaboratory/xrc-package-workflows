@@ -27,16 +27,24 @@ This version of the {{displayName}} package is compatible with the following ver
 * {{unity}} and later
 
 {{/if}}
-{{#if dependencies}}
+{{#if unityDependencies}}
 ### Dependencies
 
 The {{displayName}} package has the following dependencies which are automatically added to your project when installing:
 
-{{#each dependencies}}
-* {{name}}@{{version}}
+{{#each unityDependencies}}
+* {{#if documentationUrl}}[{{name}}]({{documentationUrl}}){{/if}}{{#unless documentationUrl}}{{name}}{{/unless}} {{version}}
 {{/each}}
 
-If the package has additional Git dependencies listed in the package description, such as XRC Toolkit packages, then they need to be installed manually via the Unity Package Manager.
+{{/if}}
+{{#if xrcDependencies}}
+### XRC Toolkit dependencies
+
+The {{displayName}} package also depends on the following XRC Toolkit packages. The Package Manager does not install them automatically: add each one from its Git URL first.
+
+{{#each xrcDependencies}}
+* [{{name}}]({{documentationUrl}}) {{version}} or later: `{{gitUrl}}`
+{{/each}}
 
 {{/if}}
 ### Installation
