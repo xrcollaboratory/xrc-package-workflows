@@ -38,8 +38,6 @@ internal static class SamplesPage
             "",
         };
         markdown.AddRange(sections);
-        markdown.Add("");
-        markdown.Add("_This document is automatically generated. Do not edit manually._");
 
         var manual = Path.Combine(docsFolder, "manual");
         Directory.CreateDirectory(manual);
