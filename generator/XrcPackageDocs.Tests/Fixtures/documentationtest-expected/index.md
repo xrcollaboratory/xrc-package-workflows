@@ -31,4 +31,3 @@ From Unity: [Install a UPM package from a Git URL](https://docs.unity3d.com/6000
 
 > [!NOTE]
 > Even though the package documentation is public, the package itself and its repository might be private and not accessible. If you haven't been granted access to the repository you will not be able to install the package.
-

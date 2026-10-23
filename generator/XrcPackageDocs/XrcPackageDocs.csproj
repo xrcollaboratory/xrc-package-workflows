@@ -22,4 +22,8 @@
     <InternalsVisibleTo Include="XrcPackageDocs.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Templates/index.md" LogicalName="Templates/index.md" />
+  </ItemGroup>
+
 </Project>
