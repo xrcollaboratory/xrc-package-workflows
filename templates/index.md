@@ -8,6 +8,12 @@
 {{description}}
 
 {{/if}}
+* Name: `{{name}}`
+* Display name: {{displayName}}
+* Version: {{version}} ([changelog](changelog/CHANGELOG.md))
+* [Repository]({{repositoryUrl}})
+* [License](license/LICENSE.md)
+
 The package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.
 
 ## Installation
@@ -41,10 +47,3 @@ See Unity's manual: [Install a UPM package from a Git URL](https://docs.unity3d.
 > This documentation is public, but the package is not. Its repository is private to {{author}}. Installing the package requires a GitHub account that {{author}} has given access to the repository; without it, the Package Manager cannot download the package.
 
 {{/if}}
-## Package
-
-* Name: `{{name}}`
-* Display name: {{displayName}}
-* Version: {{version}} ([changelog](changelog/CHANGELOG.md))
-* [Repository]({{repositoryUrl}})
-* [License](license/LICENSE.md)
