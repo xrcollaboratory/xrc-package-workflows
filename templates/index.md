@@ -27,30 +27,20 @@ The package has the following dependencies.
 
 {{/if}}
 {{/unless}}
-{{#if xrcDependencies}}
-### XRC Toolkit packages
-
-The Package Manager does not install these automatically, and the package cannot be installed while they are missing from the project. Add each one from its Git URL first.
-
-{{#each xrcDependencies}}
-* [{{name}}]({{documentationUrl}}) ([Git URL]({{gitUrl}}))
+{{#if dependencies}}
+{{#each dependencies}}
+* {{#if gitUrl}}[{{name}}]({{documentationUrl}}) ([Git URL]({{gitUrl}})){{/if}}{{#unless gitUrl}}{{#if documentationUrl}}[{{name}}@{{version}}]({{documentationUrl}}){{/if}}{{#unless documentationUrl}}{{name}}@{{version}}{{/unless}}{{/unless}}
 {{/each}}
 
 {{/if}}
-{{#if unityDependencies}}
-### Other packages
-
-The Package Manager installs these automatically.
-
-{{#each unityDependencies}}
-* {{#if documentationUrl}}[{{name}}@{{version}}]({{documentationUrl}}){{/if}}{{#unless documentationUrl}}{{name}}@{{version}}{{/unless}}
-{{/each}}
+{{#if xrcDependencies}}
+The Package Manager does not install Git dependencies automatically. Add each package that has a Git URL to the project before installing this package.
 
 {{/if}}
 ## Installation
 
 {{#if xrcDependencies}}
-Add the XRC Toolkit packages listed under [Dependencies](#dependencies) first. Then, in the Package Manager, choose **Add package from git URL** and enter the package's [Git URL]({{repositoryUrl}}).
+Add the Git dependencies listed under [Dependencies](#dependencies) first. Then, in the Package Manager, choose **Add package from git URL** and enter the package's [Git URL]({{repositoryUrl}}).
 {{/if}}
 {{#unless xrcDependencies}}
 In the Package Manager, choose **Add package from git URL** and enter the package's [Git URL]({{repositoryUrl}}).
