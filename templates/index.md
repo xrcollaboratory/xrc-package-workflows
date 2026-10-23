@@ -20,7 +20,7 @@ This version of the package was developed and tested with Unity {{unity}}.
 Add these XRC Toolkit packages first. The Package Manager does not install them for you:
 
 {{#each xrcDependencies}}
-* [{{name}}]({{documentationUrl}}) {{version}} or later: `{{gitUrl}}`
+* [{{name}}]({{documentationUrl}}) {{version}} or later: [{{gitUrl}}]({{gitUrl}})
 {{/each}}
 
 {{/if}}
@@ -32,11 +32,7 @@ These Unity packages are installed automatically:
 {{/each}}
 
 {{/if}}
-In the Package Manager, choose **Add package from git URL** and enter:
-
-```
-{{repositoryUrl}}
-```
+In the Package Manager, choose **Add package from git URL** and enter [{{repositoryUrl}}]({{repositoryUrl}}).
 
 See Unity's manual: [Install a UPM package from a Git URL](https://docs.unity3d.com/6000.0/Documentation/Manual/upm-ui-giturl.html). The samples are under the Samples tab of the package.
 

@@ -8,11 +8,7 @@ The package's components are described on the [Components](manual/components.md)
 
 This version of the package was developed and tested with Unity 6000.0.
 
-In the Package Manager, choose **Add package from git URL** and enter:
-
-```
-https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.documentationtest.git
-```
+In the Package Manager, choose **Add package from git URL** and enter [https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.documentationtest.git](https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.documentationtest.git).
 
 See Unity's manual: [Install a UPM package from a Git URL](https://docs.unity3d.com/6000.0/Documentation/Manual/upm-ui-giturl.html). The samples are under the Samples tab of the package.
 
