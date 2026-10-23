@@ -11,7 +11,7 @@
 * Name: `{{name}}`
 * Display name: {{displayName}}
 * Version: {{version}} ([changelog](changelog/CHANGELOG.md))
-* [Repository]({{repositoryUrl}})
+* [Git URL]({{repositoryUrl}})
 * [License](license/LICENSE.md)
 
 The package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.
@@ -26,7 +26,7 @@ This version of the package was developed and tested with Unity {{unity}}.
 Add these XRC Toolkit packages first. The Package Manager does not install them for you:
 
 {{#each xrcDependencies}}
-* [{{name}}]({{documentationUrl}}) {{version}} or later: [{{gitUrl}}]({{gitUrl}})
+* [{{name}}]({{documentationUrl}}) {{version}} or later ([Git URL]({{gitUrl}}))
 {{/each}}
 
 {{/if}}
@@ -38,7 +38,7 @@ These Unity packages are installed automatically:
 {{/each}}
 
 {{/if}}
-In the Package Manager, choose **Add package from git URL** and enter [{{repositoryUrl}}]({{repositoryUrl}}).
+In the Package Manager, choose **Add package from git URL** and enter the package's [Git URL]({{repositoryUrl}}).
 
 See Unity's manual: [Install a UPM package from a Git URL](https://docs.unity3d.com/6000.0/Documentation/Manual/upm-ui-giturl.html). The samples are under the Samples tab of the package.
 
