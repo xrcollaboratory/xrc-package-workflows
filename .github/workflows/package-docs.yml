@@ -15,7 +15,7 @@ on:
       generator-version:
         description: Release tag of xrc-package-docs in xrc-package-workflows.
         type: string
-        default: "generator-v1.0.4"
+        default: "generator-v1.0.5"
 
 jobs:
   build:
