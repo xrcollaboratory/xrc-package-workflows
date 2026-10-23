@@ -54,12 +54,11 @@ public sealed class TemplateTests
     {
         var page = Template.Render("index.md", Values());
 
-        Assert.StartsWith("# XRC Example\n\nAn example.\n\n* Name: `edu.cornell.xrc.toolkit.example`\n* Display name: XRC Example\n* Version: 1.2.3 ([changelog](changelog/CHANGELOG.md))\n* [Git URL](https://example.invalid/example.git)\n* [License](license/LICENSE.md)\n\nThe package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.\n\n## Installation\n\nThis version of the package was developed and tested with Unity 6000.0.\n\n", page);
-        Assert.Contains("* [edu.cornell.xrc.toolkit.core](https://xrcollaboratory.github.io/edu.cornell.xrc.toolkit.core/) 0.4.4 or later ([Git URL](https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.core.git))\n", page);
-        Assert.Contains("* [com.unity.inputsystem](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/) 1.14.1\n* com.example.registry 2.0.0\n", page);
-        Assert.Contains("and enter the package's [Git URL](https://example.invalid/example.git).\n", page);
+        Assert.StartsWith("# XRC Example\n\nAn example.\n\n* Name: `edu.cornell.xrc.toolkit.example`\n* Display name: XRC Example\n* Version: 1.2.3 ([changelog](changelog/CHANGELOG.md))\n* [Git URL](https://example.invalid/example.git)\n* [License](license/LICENSE.md)\n\nThe package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.\n\n## Installation\n\nAdd the XRC Toolkit packages listed under [Dependencies](#dependencies) first. Then, in the Package Manager, choose **Add package from git URL** and enter the package's [Git URL](https://example.invalid/example.git).\n\nSee Unity's manual:", page);
         Assert.Contains("> [!NOTE]\n> This documentation is public, but the package is not.", page);
-        Assert.EndsWith("the Package Manager cannot download the package.\n\n", page);
+        Assert.Contains("## Technical details\n\n### Requirements\n\nThis version of the package was developed and tested with Unity 6000.0.\n\n### Dependencies\n\n#### XRC Toolkit packages\n\n", page);
+        Assert.Contains("* [edu.cornell.xrc.toolkit.core@0.4.4](https://xrcollaboratory.github.io/edu.cornell.xrc.toolkit.core/) ([Git URL](https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.core.git))\n\n#### Unity packages\n\n", page);
+        Assert.EndsWith("* [com.unity.inputsystem@1.14.1](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/)\n* com.example.registry@2.0.0\n\n", page);
         Assert.DoesNotContain("{{", page);
     }
 
@@ -72,25 +71,28 @@ public sealed class TemplateTests
         var page = Template.Render("index.md", values);
 
         Assert.DoesNotContain("[!NOTE]", page);
-        Assert.EndsWith("The samples are under the Samples tab of the package.\n\n", page);
+        Assert.Contains("The samples are under the Samples tab of the package.\n\n## Technical details\n", page);
     }
 
     [Fact]
     public void SkippedBlocksLeaveNoBlankLine()
     {
         var values = Values();
+        values["dependencies"] = new List<IReadOnlyDictionary<string, object?>>();
         values["unityDependencies"] = new List<IReadOnlyDictionary<string, object?>>();
         values["xrcDependencies"] = new List<IReadOnlyDictionary<string, object?>>();
         values["components"] = new List<IReadOnlyDictionary<string, object?>>();
         values["samples"] = new List<IReadOnlyDictionary<string, object?>>();
         values["description"] = "";
         values["unity"] = "";
+        values["private"] = false;
 
         var page = Template.Render("index.md", values);
 
         Assert.StartsWith("# XRC Example\n\n* Name: `edu.cornell.xrc.toolkit.example`\n", page);
         Assert.Contains("* [License](license/LICENSE.md)\n\nThe package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.\n\n## Installation\n\nIn the Package Manager, choose", page);
-        Assert.DoesNotContain("installs automatically", page);
+        Assert.EndsWith("The samples are under the Samples tab of the package.\n\n## Technical details\n\n", page);
+        Assert.DoesNotContain("Dependencies", page);
     }
 
     [Fact]
