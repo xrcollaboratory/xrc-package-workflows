@@ -10,6 +10,10 @@
 
 The package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.
 
+## Dependencies
+
+This version of the package was developed and tested with Unity 6000.0.
+
 ## Installation
 
 In the Package Manager, choose **Add package from git URL** and enter the package's [Git URL](https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.documentationtest.git).
@@ -18,10 +22,3 @@ See Unity's manual: [Install a UPM package from a Git URL](https://docs.unity3d.
 
 > [!NOTE]
 > This documentation is public, but the package is not. Its repository is private to XR Collaboratory. Installing the package requires a GitHub account that XR Collaboratory has given access to the repository; without it, the Package Manager cannot download the package.
-
-## Technical details
-
-### Requirements
-
-This version of the package was developed and tested with Unity 6000.0.
-

@@ -16,6 +16,38 @@
 
 The package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.
 
+## Dependencies
+
+{{#if unity}}
+This version of the package was developed and tested with Unity {{unity}}{{#if dependencies}}, with the following package dependencies{{/if}}.
+
+{{/if}}
+{{#unless unity}}
+{{#if dependencies}}
+The package has the following dependencies.
+
+{{/if}}
+{{/unless}}
+{{#if xrcDependencies}}
+### XRC Toolkit packages
+
+The Package Manager does not install these automatically, and the package cannot be installed while they are missing from the project. Add each one from its Git URL first.
+
+{{#each xrcDependencies}}
+* [{{name}}@{{version}}]({{documentationUrl}}) ([Git URL]({{gitUrl}}))
+{{/each}}
+
+{{/if}}
+{{#if unityDependencies}}
+### Unity packages
+
+The Package Manager installs these automatically.
+
+{{#each unityDependencies}}
+* {{#if documentationUrl}}[{{name}}@{{version}}]({{documentationUrl}}){{/if}}{{#unless documentationUrl}}{{name}}@{{version}}{{/unless}}
+{{/each}}
+
+{{/if}}
 ## Installation
 
 {{#if xrcDependencies}}
@@ -30,37 +62,4 @@ See Unity's manual: [Install a UPM package from a Git URL](https://docs.unity3d.
 {{#if private}}
 > [!NOTE]
 > This documentation is public, but the package is not. Its repository is private to {{author}}. Installing the package requires a GitHub account that {{author}} has given access to the repository; without it, the Package Manager cannot download the package.
-
-{{/if}}
-## Technical details
-
-{{#if unity}}
-### Requirements
-
-This version of the package was developed and tested with Unity {{unity}}.
-
-{{/if}}
-{{#if dependencies}}
-### Dependencies
-
-{{#if xrcDependencies}}
-#### XRC Toolkit packages
-
-The Package Manager does not install these automatically, and the package cannot be installed while they are missing from the project. Add each one from its Git URL first.
-
-{{#each xrcDependencies}}
-* [{{name}}@{{version}}]({{documentationUrl}}) ([Git URL]({{gitUrl}}))
-{{/each}}
-
-{{/if}}
-{{#if unityDependencies}}
-#### Unity packages
-
-The Package Manager installs these automatically.
-
-{{#each unityDependencies}}
-* {{#if documentationUrl}}[{{name}}@{{version}}]({{documentationUrl}}){{/if}}{{#unless documentationUrl}}{{name}}@{{version}}{{/unless}}
-{{/each}}
-
-{{/if}}
 {{/if}}
