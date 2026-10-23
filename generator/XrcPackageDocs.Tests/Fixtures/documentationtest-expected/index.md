@@ -4,9 +4,8 @@
 
 * Name: `edu.cornell.xrc.toolkit.documentationtest`
 * Display name: XRC Documentation Test
-* Version: 0.1.0 ([changelog](changelog/CHANGELOG.md))
+* Version: 0.1.0
 * [Git URL](https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.documentationtest.git)
-* [License](license/LICENSE.md)
 
 The package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.
 

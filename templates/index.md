@@ -10,9 +10,8 @@
 {{/if}}
 * Name: `{{name}}`
 * Display name: {{displayName}}
-* Version: {{version}} ([changelog](changelog/CHANGELOG.md))
+* Version: {{version}}
 * [Git URL]({{repositoryUrl}})
-* [License](license/LICENSE.md)
 
 The package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.
 
@@ -34,7 +33,7 @@ The package has the following dependencies.
 The Package Manager does not install these automatically, and the package cannot be installed while they are missing from the project. Add each one from its Git URL first.
 
 {{#each xrcDependencies}}
-* [{{name}}@{{version}}]({{documentationUrl}}) ([Git URL]({{gitUrl}}))
+* [{{name}}]({{documentationUrl}}) ([Git URL]({{gitUrl}}))
 {{/each}}
 
 {{/if}}
