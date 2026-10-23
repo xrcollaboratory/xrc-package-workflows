@@ -9,9 +9,17 @@ internal static class OverviewPage
     private const string k_UnityPrefix = "com.unity.";
     private static readonly string[] k_ImageExtensions = [".gif", ".png", ".jpg", ".jpeg"];
 
-    public static void Write(PackageManifest package, string docsFolder, Report report)
+    /// <param name="components">The components page's entries: <c>label</c>, <c>anchor</c> and <c>summary</c>.</param>
+    /// <param name="isPrivate">Whether the package repository is private.</param>
+    public static void Write(PackageManifest package, string docsFolder, IReadOnlyList<IReadOnlyDictionary<string, object?>> components, bool isPrivate, Report report)
     {
         var dependencies = package.Dependencies.Select(Dependency).ToList();
+        var samples = (package.Samples ?? []).Select(s => (IReadOnlyDictionary<string, object?>)new Dictionary<string, object?>
+        {
+            ["displayName"] = s.DisplayName,
+            ["anchor"] = Anchor(s.DisplayName),
+            ["description"] = s.Description,
+        }).ToList();
         var values = new Dictionary<string, object?>
         {
             ["name"] = package.Name,
@@ -22,7 +30,10 @@ internal static class OverviewPage
             ["repositoryUrl"] = package.RepositoryUrl,
             ["documentationUrl"] = package.DocumentationUrl,
             ["author"] = package.AuthorName,
+            ["private"] = isPrivate,
             ["overviewImage"] = OverviewImage(package, docsFolder),
+            ["components"] = components,
+            ["samples"] = samples,
             ["dependencies"] = dependencies,
             // XRC packages come from Git, which the Package Manager does not fetch; everything else from a registry.
             ["xrcDependencies"] = dependencies.Where(d => IsXrc(d)).ToList(),
@@ -60,6 +71,20 @@ internal static class OverviewPage
             ["gitUrl"] = gitUrl,
             ["documentationUrl"] = documentationUrl,
         };
+    }
+
+    /// <summary>The id DocFX gives a heading, for a link to it: lower case, punctuation dropped, spaces as hyphens.</summary>
+    public static string Anchor(string heading)
+    {
+        var id = new StringBuilder();
+        foreach (var c in heading.ToLowerInvariant())
+        {
+            if (char.IsAsciiLetterOrDigit(c) || c == '-' || c == '_')
+                id.Append(c);
+            else if (c == ' ')
+                id.Append('-');
+        }
+        return id.ToString();
     }
 
     private static bool IsXrc(IReadOnlyDictionary<string, object?> dependency) =>

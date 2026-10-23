@@ -60,8 +60,10 @@ internal static class ComponentsPage
         "Decimal", "DateTime", "DateTimeOffset", "TimeSpan", "Guid", "IntPtr", "UIntPtr", "Delegate", "MulticastDelegate",
     };
 
-    public static void Write(string packageRoot, string docsFolder, Report report)
+    /// <returns>One entry per component for the overview page: <c>label</c>, <c>anchor</c> and <c>summary</c>, its first sentence.</returns>
+    public static IReadOnlyList<IReadOnlyDictionary<string, object?>> Write(string packageRoot, string docsFolder, Report report)
     {
+        var entries = new List<IReadOnlyDictionary<string, object?>>();
         var sources = RuntimeSources(packageRoot).ToList();
         var parseOptions = new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.Parse);
         var trees = sources.Select(path => CSharpSyntaxTree.ParseText(File.ReadAllText(path), parseOptions, path)).ToList();
@@ -105,6 +107,12 @@ internal static class ComponentsPage
             var summary = Summary(type, false, report);
             page.Add(summary ?? "*No summary provided*");
             page.Add("");
+            entries.Add(new Dictionary<string, object?>
+            {
+                ["label"] = displayName,
+                ["anchor"] = OverviewPage.Anchor(displayName),
+                ["summary"] = FirstSentence(summary),
+            });
             if (summary == null)
             {
                 report.Missing(type.Name + ": class summary", FileOf(type), Line(type));
@@ -165,6 +173,17 @@ internal static class ComponentsPage
         System.IO.File.WriteAllText(pagePath, string.Join("\n", page), new UTF8Encoding(false));
         report.Wrote(pagePath);
         report.Info(components.Count + " components, " + described + " fields described, " + missing + " missing");
+        return entries;
+    }
+
+    // The first sentence of a summary's first paragraph, for the one-line listing on the overview page.
+    private static string FirstSentence(string? summary)
+    {
+        if (summary == null)
+            return "";
+        var paragraph = summary.Split("\n\n")[0].Replace('\n', ' ');
+        var end = paragraph.IndexOf(". ", StringComparison.Ordinal);
+        return end < 0 ? paragraph : paragraph[..(end + 1)];
     }
 
     // ==== Components =============================================================================================

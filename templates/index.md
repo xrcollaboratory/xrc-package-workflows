@@ -8,56 +8,61 @@
 {{description}}
 
 {{/if}}
-## Technical details
+{{#if components}}
+## Components
 
-### Package
-
-* Name: {{name}}
-* Display name: {{displayName}}
-* Version: {{version}}
-{{#if repositoryUrl}}
-* [Git URL]({{repositoryUrl}})
-{{/if}}
-
-### Requirements
-
-{{#if unity}}
-This version of the {{displayName}} package is compatible with the following versions of the Unity Editor:
-
-* {{unity}} and later
-
-{{/if}}
-{{#if unityDependencies}}
-### Dependencies
-
-The {{displayName}} package has the following dependencies which are automatically added to your project when installing:
-
-{{#each unityDependencies}}
-* {{#if documentationUrl}}[{{name}}]({{documentationUrl}}){{/if}}{{#unless documentationUrl}}{{name}}{{/unless}} {{version}}
+{{#each components}}
+* [{{label}}](manual/components.md#{{anchor}}){{#if summary}}: {{summary}}{{/if}}
 {{/each}}
 
 {{/if}}
-{{#if xrcDependencies}}
-### XRC Toolkit dependencies
+{{#if samples}}
+## Samples
 
-The {{displayName}} package also depends on the following XRC Toolkit packages. The Package Manager does not install them automatically: add each one from its Git URL first.
+{{#each samples}}
+* [{{displayName}}](manual/samples.md#{{anchor}}){{#if description}}: {{description}}{{/if}}
+{{/each}}
+
+{{/if}}
+## Installation
+
+{{#if unity}}
+This version of the package was developed and tested with Unity {{unity}}.
+
+{{/if}}
+{{#if xrcDependencies}}
+Add these XRC Toolkit packages first. The Package Manager does not install them for you:
 
 {{#each xrcDependencies}}
 * [{{name}}]({{documentationUrl}}) {{version}} or later: `{{gitUrl}}`
 {{/each}}
 
 {{/if}}
-### Installation
+{{#if unityDependencies}}
+These Unity packages are installed automatically:
 
-To install the package, follow these steps:
-1. In the Unity Editor, click on **Window > Package Manager**
-2. Click the + button and choose **Add package from git URL** option
-3. Enter the package's Git URL. Make sure the URL has ".git" ending.
-4. If the repository is private, you will be asked to authenticate via your GitHub account. If you haven't been granted access to the repository you will not be able to install the package.
-5. The package should be installed into your project.
-6. You can download the package samples from under the Samples tab in the Package Manager
+{{#each unityDependencies}}
+* {{#if documentationUrl}}[{{name}}]({{documentationUrl}}){{/if}}{{#unless documentationUrl}}{{name}}{{/unless}} {{version}}
+{{/each}}
 
-From Unity: [Install a UPM package from a Git URL](https://docs.unity3d.com/6000.0/Documentation/Manual/upm-ui-giturl.html)
+{{/if}}
+In the Package Manager, choose **Add package from git URL** and enter:
 
+```
+{{repositoryUrl}}
+```
+
+See Unity's manual: [Install a UPM package from a Git URL](https://docs.unity3d.com/6000.0/Documentation/Manual/upm-ui-giturl.html). The samples are under the Samples tab of the package.
+
+{{#if private}}
 > [!NOTE]
-> Even though the package documentation is public, the package itself and its repository might be private and not accessible. If you haven't been granted access to the repository you will not be able to install the package.
+> This documentation is public, but the package is not. Its repository is private to {{author}}. Installing the package requires a GitHub account that {{author}} has given access to the repository; without it, the Package Manager cannot download the package.
+
+{{/if}}
+## Package
+
+* Name: `{{name}}`
+* Display name: {{displayName}}
+* Version: {{version}} ([changelog](changelog/CHANGELOG.md))
+* [Repository]({{repositoryUrl}})
+* [License](license/LICENSE.md)

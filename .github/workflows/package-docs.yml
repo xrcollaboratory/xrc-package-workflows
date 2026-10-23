@@ -63,7 +63,9 @@ jobs:
       # Writes Documentation~/index.md, manual/samples.md and manual/components.md. A field or class without an XML
       # summary, and a sample without a description, become warnings on the source line.
       - name: Generate pages
-        run: '"$RUNNER_TEMP/generator/xrc-package-docs.exe" . --templates .xrc-package-workflows/templates --annotations'
+        env:
+          PRIVATE: ${{ github.event.repository.private }}
+        run: '"$RUNNER_TEMP/generator/xrc-package-docs.exe" . --templates .xrc-package-workflows/templates --private "$PRIVATE" --annotations'
 
       - name: Remove the templates checkout
         run: rm -rf .xrc-package-workflows

@@ -6,12 +6,13 @@ namespace XrcPackageDocs;
 /// </summary>
 internal static class Generator
 {
-    public const string Usage = "Usage: xrc-package-docs <package root> [--out <Documentation~ folder>] [--templates <folder>] [--annotations]";
+    public const string Usage = "Usage: xrc-package-docs <package root> [--out <Documentation~ folder>] [--templates <folder>] [--private true|false] [--annotations]";
 
     /// <summary>
     /// The command line: the package root, <c>--out</c> for a Documentation~ folder other than the package's own,
-    /// <c>--templates</c> for a folder of page templates to use instead of the built-in ones, and
-    /// <c>--annotations</c> for GitHub Actions warnings on the source line of each missing description.
+    /// <c>--templates</c> for a folder of page templates to use instead of the built-in ones, <c>--private</c> for
+    /// whether the package repository is private (assumed when not given), and <c>--annotations</c> for GitHub
+    /// Actions warnings on the source line of each missing description.
     /// </summary>
     /// <returns>0 when the pages were written (missing descriptions are warnings), 1 on an error, 2 on bad arguments.</returns>
     public static int Run(string[] args, TextWriter output, TextWriter error)
@@ -19,6 +20,7 @@ internal static class Generator
         var arguments = args.ToList();
         var annotations = arguments.Remove("--annotations");
         var outFolder = Option(arguments, "--out");
+        var isPrivate = !string.Equals(Option(arguments, "--private"), "false", StringComparison.OrdinalIgnoreCase);
         Template.Folder = Option(arguments, "--templates") is { } templates ? Path.GetFullPath(templates) : null;
         if (arguments.Count != 1)
         {
@@ -30,7 +32,7 @@ internal static class Generator
         var docsFolder = Path.GetFullPath(outFolder ?? Path.Combine(packageRoot, "Documentation~"));
         try
         {
-            Generate(packageRoot, docsFolder, new Report(annotations, packageRoot, output));
+            Generate(packageRoot, docsFolder, isPrivate, new Report(annotations, packageRoot, output));
             return 0;
         }
         catch (GeneratorException e)
@@ -50,12 +52,12 @@ internal static class Generator
         return value;
     }
 
-    public static void Generate(string packageRoot, string docsFolder, Report report)
+    public static void Generate(string packageRoot, string docsFolder, bool isPrivate, Report report)
     {
         var manifest = PackageManifest.Load(packageRoot);
-        OverviewPage.Write(manifest, docsFolder, report);
+        var components = ComponentsPage.Write(packageRoot, docsFolder, report);
         SamplesPage.Write(manifest, docsFolder, report);
-        ComponentsPage.Write(packageRoot, docsFolder, report);
+        OverviewPage.Write(manifest, docsFolder, components, isPrivate, report);
         DocfxSettings.Check(manifest, docsFolder, report);
     }
 }
