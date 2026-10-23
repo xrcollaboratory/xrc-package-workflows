@@ -128,7 +128,8 @@ internal static class ComponentsPage
 
             if (System.IO.File.Exists(Path.Combine(docsFolder, "images", "components", type.Name + ".png")))
             {
-                page.Add("![" + displayName + "](../images/components/" + type.Name + ".png)");
+                // An img tag rather than Markdown, so the image can be told to fill the text column.
+                page.Add("<img src=\"../images/components/" + type.Name + ".png\" alt=\"" + displayName + "\" style=\"width: 100%;\">");
                 page.Add("");
             }
 

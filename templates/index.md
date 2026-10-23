@@ -39,7 +39,7 @@ The Package Manager does not install these automatically, and the package cannot
 
 {{/if}}
 {{#if unityDependencies}}
-### Unity packages
+### Other packages
 
 The Package Manager installs these automatically.
 

@@ -8,7 +8,7 @@ Shows the test area of `DocumentationTestLogic`.
 
 A second paragraph, to check that paragraphs survive. The area is drawn as a wire sphere with `DocumentationTestFeedback.color`.
 
-![Documentation Test Feedback](../images/components/DocumentationTestFeedback.png)
+<img src="../images/components/DocumentationTestFeedback.png" alt="Documentation Test Feedback" style="width: 100%;">
 
 | Property | Description |
 |----------|-------------|
@@ -18,7 +18,7 @@ A second paragraph, to check that paragraphs survive. The area is drawn as a wir
 
 The logic of the documentation test package. It covers the cases a components page has to handle: a `sealed` class, an inherited field (`DocumentationTestBase.speed`), properties named differently from their fields, and fields documented in different ways.
 
-![Documentation Test Logic](../images/components/DocumentationTestLogic.png)
+<img src="../images/components/DocumentationTestLogic.png" alt="Documentation Test Logic" style="width: 100%;">
 
 | Property | Description |
 |----------|-------------|
