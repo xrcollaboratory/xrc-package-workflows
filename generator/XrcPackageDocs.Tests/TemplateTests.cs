@@ -54,7 +54,7 @@ public sealed class TemplateTests
     {
         var page = Template.Render("index.md", Values());
 
-        Assert.StartsWith("# XRC Example\n\nAn example.\n\n## Components\n\n* [Example Logic](manual/components.md#example-logic): Does the example.\n* [Example Input](manual/components.md#example-input)\n\n## Samples\n\n* [XRC Example](manual/samples.md#xrc-example): Shows the example.\n\n## Installation\n\nThis version of the package was developed and tested with Unity 6000.0.\n\n", page);
+        Assert.StartsWith("# XRC Example\n\nAn example.\n\nThe package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.\n\n## Installation\n\nThis version of the package was developed and tested with Unity 6000.0.\n\n", page);
         Assert.Contains("* [edu.cornell.xrc.toolkit.core](https://xrcollaboratory.github.io/edu.cornell.xrc.toolkit.core/) 0.4.4 or later: `https://github.com/xrcollaboratory/edu.cornell.xrc.toolkit.core.git`\n", page);
         Assert.Contains("* [com.unity.inputsystem](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/) 1.14.1\n* com.example.registry 2.0.0\n", page);
         Assert.Contains("```\nhttps://example.invalid/example.git\n```\n", page);
@@ -88,9 +88,7 @@ public sealed class TemplateTests
 
         var page = Template.Render("index.md", values);
 
-        Assert.StartsWith("# XRC Example\n\n## Installation\n\nIn the Package Manager, choose", page);
-        Assert.DoesNotContain("## Components", page);
-        Assert.DoesNotContain("## Samples", page);
+        Assert.StartsWith("# XRC Example\n\nThe package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.\n\n## Installation\n\nIn the Package Manager, choose", page);
         Assert.DoesNotContain("installed automatically", page);
     }
 
