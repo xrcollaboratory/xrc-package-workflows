@@ -2,14 +2,7 @@
 
 ![edu.cornell.xrc.toolkit.documentationtest](images/overview/edu.cornell.xrc.toolkit.documentationtest.png)
 
-## Components
-
-* [Documentation Test Feedback](manual/components.md#documentation-test-feedback): Shows the test area of `DocumentationTestLogic`.
-* [Documentation Test Logic](manual/components.md#documentation-test-logic): The logic of the documentation test package.
-
-## Samples
-
-* [XRC Documentation Test](manual/samples.md#xrc-documentation-test): Sample showcasing the XRC Documentation Test package.
+The package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.
 
 ## Installation
 

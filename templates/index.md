@@ -8,22 +8,8 @@
 {{description}}
 
 {{/if}}
-{{#if components}}
-## Components
+The package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.
 
-{{#each components}}
-* [{{label}}](manual/components.md#{{anchor}}){{#if summary}}: {{summary}}{{/if}}
-{{/each}}
-
-{{/if}}
-{{#if samples}}
-## Samples
-
-{{#each samples}}
-* [{{displayName}}](manual/samples.md#{{anchor}}){{#if description}}: {{description}}{{/if}}
-{{/each}}
-
-{{/if}}
 ## Installation
 
 {{#if unity}}
