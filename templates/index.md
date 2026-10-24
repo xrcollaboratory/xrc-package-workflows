@@ -13,8 +13,6 @@
 * Version: {{version}}
 * [Git URL]({{repositoryUrl}})
 
-The package's components are described on the [Components](manual/components.md) page, and its samples on the [Samples](manual/samples.md) page.
-
 ## Dependencies
 
 {{#if unity}}
