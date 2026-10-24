@@ -225,7 +225,9 @@ internal static class ComponentsPage
                 var name = current.Name;
                 if (k_ComponentBases.Contains(name))
                     return true;
-                if (k_NonComponentBases.Contains(name))
+                // An unresolved interface in the base list is taken for the base class; by convention its name
+                // starts with I and a capital, and a class with only interfaces has no base class.
+                if (k_NonComponentBases.Contains(name) || (name.Length > 1 && name[0] == 'I' && char.IsUpper(name[1])))
                     return false;
                 var looksLikeComponent = LooksLikeComponent(type);
                 report.Warning(type.Name + ": base class " + name + " is not a known Unity type; " +
@@ -327,12 +329,14 @@ internal static class ComponentsPage
 
     // ==== Properties =============================================================================================
 
-    // The public property, here or in a base class, whose getter reads exactly this field.
+    // The public property, here or in a base class, whose getter reads this field: one that reads only this field
+    // first, else one that reads it among others, as a getter that resolves a fallback does.
     private static IPropertySymbol? ExposingProperty(INamedTypeSymbol type, IFieldSymbol field, Dictionary<SyntaxTree, SemanticModel> models)
     {
         if (field.AssociatedSymbol is IPropertySymbol auto)
             return auto.DeclaredAccessibility == Accessibility.Public ? auto : null;
 
+        var candidates = new List<(IPropertySymbol property, List<IFieldSymbol> reads)>();
         var chain = SourceChain(type);
         for (var i = chain.Count - 1; i >= 0; i--)
         {
@@ -342,40 +346,45 @@ internal static class ComponentsPage
                 .ThenBy(Position);
             foreach (var property in properties)
             {
-                if (SymbolEqualityComparer.Default.Equals(ReadField(property, models), field))
-                    return property;
+                var reads = ReadFields(property, models);
+                if (reads.Any(read => SymbolEqualityComparer.Default.Equals(read, field)))
+                    candidates.Add((property, reads));
             }
         }
-        return null;
+        return (candidates.FirstOrDefault(c => c.reads.Count == 1).property ?? candidates.FirstOrDefault().property);
     }
 
-    // The single instance field a getter reads, or null when it reads none or several.
-    private static IFieldSymbol? ReadField(IPropertySymbol property, Dictionary<SyntaxTree, SemanticModel> models)
+    // The distinct instance fields a getter reads, in order of first appearance.
+    private static List<IFieldSymbol> ReadFields(IPropertySymbol property, Dictionary<SyntaxTree, SemanticModel> models)
     {
+        var found = new List<IFieldSymbol>();
         if (property.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() is not PropertyDeclarationSyntax syntax)
-            return null;
+            return found;
 
         SyntaxNode? body = syntax.ExpressionBody?.Expression;
         if (body == null)
         {
             var getter = syntax.AccessorList?.Accessors.FirstOrDefault(a => a.IsKind(SyntaxKind.GetAccessorDeclaration));
             if (getter == null)
-                return null;
+                return found;
             body = (SyntaxNode?)getter.Body ?? getter.ExpressionBody?.Expression;
             if (body == null)
-                return property.ContainingType.GetMembers().OfType<IFieldSymbol>()
+            {
+                var backing = property.ContainingType.GetMembers().OfType<IFieldSymbol>()
                     .FirstOrDefault(f => SymbolEqualityComparer.Default.Equals(f.AssociatedSymbol, property));
+                if (backing != null)
+                    found.Add(backing);
+                return found;
+            }
         }
 
         var model = models[syntax.SyntaxTree];
-        IFieldSymbol? found = null;
         foreach (var identifier in body.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>())
         {
             if (model.GetSymbolInfo(identifier).Symbol is not IFieldSymbol { IsStatic: false, IsConst: false } read)
                 continue;
-            if (found != null && !SymbolEqualityComparer.Default.Equals(found, read))
-                return null;
-            found = read;
+            if (!found.Any(f => SymbolEqualityComparer.Default.Equals(f, read)))
+                found.Add(read);
         }
         return found;
     }
